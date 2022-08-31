@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import { savePaymentMethod } from '../actions/cartActions'
 import CheckoutSteps from '../components/CheckoutSteps'
+import { Link } from 'react-router-dom'
 
 const PaymentScreen = () => {
   const navigate = useNavigate()
@@ -25,47 +26,52 @@ const PaymentScreen = () => {
     navigate('/placeorder')
   }
   return (
+    <>
+       <Link to='/shipping' className='btn btn-light my-3'>
+    بازگشت
+  </Link>
     <FormContainer>
       <CheckoutSteps step1 step2 step3 />
-      <h1>Payment Method</h1>
+      <h1>روش پرداخت</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group>
-          <Form.Label as='legend'>Select Method</Form.Label>
+          <Form.Label as='legend'>روش پرداخت خود را انتخاب نمایید</Form.Label>
 
           <Col>
             <Form.Check
+              label='پرداخت نقدی'
               type='radio'
-              label='PayPal or Credit Card'
-              id='PayPal'
               name='paymentMethod'
-              value='paypal'
-              onChange={(e) => setPaymentMethod(e.currentTarget.checked)}
+              value='cash'
+              id='paymentMethod1'
+              onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check
+              label='کارت به کارت'
               type='radio'
-              label='Stripe'
-              id='Stripe'
               name='paymentMethod'
-              value='Stripe'
-              onChange={(e) => setPaymentMethod(e.currentTarget.checked)}
+              value='cartToCart'
+              id='paymentMethod2'
+              onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check
+              label='درگاه پرداخت اینترنتی زرین پال'
               type='radio'
-              label='ZarinPal'
-              id='ZarinPal'
               name='paymentMethod'
               value='ZarinPal'
+              id='paymentMethod3'
               checked
-              onChange={(e) => setPaymentMethod(e.currentTarget.checked)}
+              onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
           </Col>
         </Form.Group>
 
         <Button type='submit' variant='primary'>
-          Continue
+          ادامه
         </Button>
       </Form>
     </FormContainer>
+    </>
   )
 }
 

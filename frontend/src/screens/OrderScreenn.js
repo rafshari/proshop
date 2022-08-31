@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
 import Message from '../components/Message'
-import { Link, useNavigate } from 'react-router-dom'
-import { getOrderDetails, payOrder } from '../actions/orderActions'
+import { Link, useNavigate, useParams} from 'react-router-dom'
+import { getOrderDetails, deliverOrder } from '../actions/orderActions'
 import Loader from '../components/Loader'
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
-import { useParams } from 'react-router-dom'
-import { ORDER_PAY_RESET } from '../constants/orderConstants'
-import { payRequest } from '../actions/payActions'
+import {
+  ORDER_PAY_RESET,
+  ORDER_DELIVER_RESET,
+} from '../constants/orderConstants'
+import commaNumber from 'comma-number'
+//import { useReactToPrint } from 'react-to-print'
+import {Miladi} from 'basic-shamsi'
 
 const OrderScreen = () => {
   const navigate = useNavigate()
@@ -17,37 +20,40 @@ const OrderScreen = () => {
 
   const { orderId } = useParams()
 
-  const [payRequset, setPayRequset] = useState(false)
+
+  const orderDetails = useSelector((state) => state.orderDetails)
+  const { order, loading, error } = orderDetails
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
-  const orderDetails = useSelector((state) => state.orderDetails)
-  const { order, loading, error } = orderDetails
+  const orderDeliver = useSelector((state) => state.orderDeliver)
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
   //const {user} = order
   //console.log(user)
 
   if (!loading) {
     //calculate
-    const addDecimals = (num) => {
-      return (Math.round(num * 100) / 100).toFixed(0)
-    }
-    order.itemsPrice = addDecimals(
+    order.itemsPrice = commaNumber(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     )
   }
   useEffect(() => {
-    if (!order || successPay) {
-      dispatch({ type: ORDER_PAY_RESET })
       dispatch(getOrderDetails(orderId))
-    } else {
-      if (!order.isPaid) {
-        navigate(`/Order/${orderId}`)
-      } else {
-        setPayRequset(true)
-      }
-    }
-  }, [dispatch, navigate, orderId, successPay, order])
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch({ type: ORDER_DELIVER_RESET })
+     }, [
+    orderId,
+    dispatch,
+    userLogin,
+    navigate,
+    successPay,
+    successDeliver,
+    ])
 
   const PaymentRequestHandler = async (amount, userId, orderId) => {
     let params = {
@@ -55,10 +61,16 @@ const OrderScreen = () => {
       userId: order.user._id,
       orderId: order._id,
     }
-    const {data} = await axios.post('/api/payment', params)
+    const { data } = await axios.post('/api/payment', params)
     window.location.href = data
   }
-
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order))
+  }
+  //const componentRef = useRef()
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // })
 
   return loading ? (
     <Loader />
@@ -66,53 +78,58 @@ const OrderScreen = () => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <>
-      <h1>Order: {order._id} </h1>
+      <Link to='/' className='btn btn-light my-3'>
+        بازگشت
+      </Link>
+      <h1>سفارش: {order._id} </h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h2>ارسال به</h2>
               <p>
                 {' '}
-                <strong>Name: </strong> {order.user.name}{' '}
+                <strong>نام و نام خانوادگی: </strong> {order.user.name}{' '}
               </p>
               <p>
                 {' '}
-                <strong>Email: </strong>{' '}
+                <strong>ایمیل: </strong>{' '}
                 <a href={`mailto: ${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
-                <strong>Address: </strong>
+                <strong>آدرس: </strong>
                 {order.shippingAddress.address},{order.shippingAddress.city},
                 {order.shippingAddress.postalCode},
                 {order.shippingAddress.country},
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
-                  Delivered on {order.deliveredAt}
+                  وضعیت: تحویل شد {Miladi.toShamsi(order.deliveredAt)}
                 </Message>
               ) : (
-                <Message variant='danger'>Not Delivered</Message>
+                <Message variant='danger'>وضعیت: تحویل نشده </Message>
               )}
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>payment method</h2>
+              <h2>روش پرداخت</h2>
               <p>
-                <strong>Method: </strong>
+                <strong>روش: </strong>
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>Paid on {order.paidAt}</Message>
+                <Message variant='success'>
+                  وضعیت: پرداخت شد {Miladi.toShamsi(order.paidAt)}
+                </Message>
               ) : (
-                <Message variant='danger'>Not paid</Message>
+                <Message variant='danger'> وضعیت: پرداخت نشده</Message>
               )}
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Order Items</h2>
+              <h2> محصولات شما:</h2>
               {order.orderItems.length === 0 ? (
-                <Message> Order is empty</Message>
+                <Message>سفارش نداشته اید</Message>
               ) : (
                 <ListGroup variant='flush'>
                   {order.orderItems.map((item, index) => (
@@ -132,7 +149,9 @@ const OrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} ضرب در {commaNumber(item.price)} ={' '}
+                          {commaNumber(item.qty * item.price)}
+                          ریال
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -147,42 +166,63 @@ const OrderScreen = () => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <h2>Order Summary</h2>
+                <h2>خلاصه سفارش</h2>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
+                  <Col>جمع</Col>
+                  <Col>{commaNumber(order.itemsPrice)} ریال</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
+                  <Col>هزینه ارسال</Col>
+                  <Col>{commaNumber(order.shippingPrice)} ریال</Col>
+                </Row>
+              </ListGroup.Item>
+
+              <ListGroup.Item>
+                <Row>
+                  <Col> 9% مالیات برارزش افزوده </Col>
+                  <Col>{commaNumber(order.taxPrice)} ریال</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>جمع کل:</Col>
+                  <Col>{commaNumber(order.totalPrice)} ریال </Col>
                 </Row>
               </ListGroup.Item>
+              {loadingPay && <Loader />}
               {!order.isPaid && (
                 <ListGroup.Item>
-                  <Button onClick={PaymentRequestHandler} disabled={false}>
-                    PAY
+                  <Button
+                    className='btn btn-block'
+                    onClick={PaymentRequestHandler}
+                    disabled={false}
+                  >
+                    پرداخت
                   </Button>
                 </ListGroup.Item>
               )}
+
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      تحویل شد
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

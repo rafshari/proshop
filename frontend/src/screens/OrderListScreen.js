@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listOrders } from '../actions/orderActions'
+import {Miladi} from 'basic-shamsi'
+
 
 const OrderListScreen = () => {
   const dispatch = useDispatch()
@@ -27,7 +29,7 @@ const OrderListScreen = () => {
      
   return (
     <>
-      <h1>Orders</h1>
+      <h1>لیست سفارشات</h1>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -36,12 +38,12 @@ const OrderListScreen = () => {
         <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>USER</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAYED</th>
-              <th>DELIVERED</th>
+              <th>کد</th>
+              <th>نام و نام خانوادگی</th>
+              <th>تاریخ</th>
+              <th>جمع</th>
+              <th>پرداخت</th>
+              <th>وضعیت تحویل </th>
               <th></th>
             </tr>
           </thead>
@@ -50,18 +52,18 @@ const OrderListScreen = () => {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>${order.totalPrice}</td>
+                <td>{Miladi.toShamsi(order.createdAt)}</td>
+                <td>{order.totalPrice}  ریال</td>
                 <td>
                 {order.isPaid ? (
-                    order.paidAt.substring(0, 10)
+                    Miladi.toShamsi(order.paidAt)
                   ) : (
                     <i className='fas fa-times' style={{ color: 'red' }}></i>
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
-                    order.deliveredAt.substring(0, 10)
+                    Miladi.toShamsi(order.deliveredAt)
                   ) : (
                     <i className='fas fa-times' style={{ color: 'red' }}></i>
                   )}
@@ -69,7 +71,7 @@ const OrderListScreen = () => {
                 <td>
                   <LinkContainer to={`/order/${order._id}`}>
                     <Button variant='light' className='btn-sm'>
-                      Details
+                      جزئیات
                     </Button>
                   </LinkContainer>
                 </td>

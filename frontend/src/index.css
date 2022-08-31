@@ -1,6 +1,19 @@
 main {
   min-height: 80vh;
+  font-family: BYekan;
 }
+@font-face {
+  font-family: 'byekan';
+  src: url('./fonts/BYekan.eot');
+  src: url('./fonts/BYekan.woff') format('woff');
+  src:url('./fonts/BYekan.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  }
+  body{
+  font-family: "byekan";
+  }
+
 
 h3 {
   padding: 1rem 0;
@@ -9,6 +22,7 @@ h3 {
 h1 {
   font-size: 1.8rem;
   padding: 1rem 0;
+  font-family: BYekan;
 }
 
 h2 {

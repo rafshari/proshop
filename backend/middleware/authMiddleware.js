@@ -16,12 +16,12 @@ const protect = AsyncHandler(async (req, res, next) => {
     } catch (error) {
         console.error(error)
         res.status(401)
-        throw new Error('Not authorized, token failed')
+        throw new Error('دسترسی مجاز نیست، توکن نیست')
     }
   }
   if (!token) {
     res.status(401)
-    throw new Error('Not authorized, no token')
+    throw new Error('  کاربری شما یافت نشد لطفا ابتدا ثبت نام کنید')
   }
 })
 const admin = (req,res,next) => {

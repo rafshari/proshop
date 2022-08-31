@@ -1,14 +1,16 @@
 import React from 'react'
-import { Container,Row , Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap'
 
 const Footer = () => {
   return (
     <footer>
-     <Container>
+      <Container>
         <Row>
-            <Col className='text-center py-3'>Copyright &copy; ProShop </Col>
+          <Col className='text-center py-3'>
+            کلیه حقوق محفوظ است &copy; DigiGhat 2022{' '}
+          </Col>
         </Row>
-     </Container>
+      </Container>
     </footer>
   )
 }

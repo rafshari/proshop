@@ -7,32 +7,39 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
+import {Miladi} from 'basic-shamsi'
+import commaNumber from 'comma-number'
+import {pay} from '../actions/payActions'
+
+
 
 const ProfileScreen = () => {
   const [name, setName] = useState('')
+  const [mobile, setMobile] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
-  const [balance, setBalance] = useState(0)
+  const [amount, setAmount] = useState('')
 
-
+  
+  
   const dispatch = useDispatch()
-
+  
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = userDetails
-
+  
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
-
+  
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
   const { success } = userUpdateProfile
-
+  
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
-
+  
   const navigate = useNavigate()
-
+  
   useEffect(() => {
      if (!userInfo) {
       navigate('/login')
@@ -42,6 +49,7 @@ const ProfileScreen = () => {
         dispatch(listMyOrders(user._id))
       } else {
         setName(user.name)
+        setMobile(user.mobile)
         setEmail(user.email)
       }
     }
@@ -52,68 +60,98 @@ const ProfileScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      dispatch(updateUserProfile({ id: user._id, name, mobile, email, password }))
     }
+  }
+  const payHandler = (e) =>{
+    e.preventDefault()
+    dispatch(pay(amount))
   }
   return (
     <Row>
       <Col md={3}>
-        <h2>User Profile</h2>
+        <h2>پروفایل کاربر</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
         {success && (
-          <Message variant='success'>Profile Updated successfully</Message>
+          <Message variant='success'>پروفایل بروزرسانی شد</Message>
         )}
         {loading && <Loader />}
 
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
-            <Form.Label>Name</Form.Label>
+            <Form.Label>نام و نام خانوادگی</Form.Label>
             <Form.Control
               type='name'
-              placeholder='Enter name'
+              placeholder='نام و نام خانوادگی خود را وارد کنید'
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
+          <Form.Group controlId='mobile'>
+            <Form.Label> شماره همراه </Form.Label>
+            <Form.Control
+              type='mobile'
+              placeholder='شماره همراه '
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+
+
           <Form.Group controlId='email'>
-            <Form.Label>Email Address</Form.Label>
+            <Form.Label>آدرس ایمیل</Form.Label>
             <Form.Control
               type='email'
-              placeholder='Enter email'
+              placeholder='ایمیل خود را  وارد کنید'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
           <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
+            <Form.Label>پسورد</Form.Label>
             <Form.Control
               type='password'
-              placeholder='Enter password'
+              placeholder='پسورد خود را وارد کنید'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
           <Form.Group controlId='confirmPassword'>
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label>تایید پسورد</Form.Label>
             <Form.Control
               type='password'
-              placeholder='Confirm password'
+              placeholder='پسورد خود را مجدد وارد کنید'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
           <Button type='submit' variant='primary'>
-            Update
+            ذخیره
           </Button>
+          
+        <h2>اعتبار من: {user.balance}</h2>
+        <Form.Group controlId='credit'>
+            <Form.Label>افزایش اعتبار</Form.Label>
+            <Form.Control
+              type='number'
+              placeholder='مبلغ دلخواه'
+              value={amount}
+              onChange={payHandler}
+            ></Form.Control>
+          </Form.Group>
+        <Button  type='submit' variant='primary'>
+          پرداخت
+        </Button>
+      
         </Form>
       </Col>
       <Col md={9}>
-        <h2>My Orders</h2>
+        <h2>سفارش های من:</h2>
         {loadingOrders ? (
           <Loader />
         ) : errorOrders ? (
@@ -122,11 +160,11 @@ const ProfileScreen = () => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
+                <th>کد</th>
+                <th>تاریخ</th>
+                <th>مبلغ  (ریال)</th>
+                <th>پرداخت شده</th>
+                <th>تحویل شده</th>
                 <th></th>
               </tr>
             </thead>
@@ -134,11 +172,11 @@ const ProfileScreen = () => {
               {orders.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+                  <td>{Miladi.toShamsi(order.createdAt)}</td>
+                  <td>{commaNumber(order.totalPrice)}</td>
                   <td>
                     {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
+                      Miladi.toShamsi(order.paidAt)
                     ) : (
                       <i className='fas fa-times' style={{ color: 'red' }}></i>
                     )}
@@ -153,7 +191,7 @@ const ProfileScreen = () => {
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
                       <Button className='btn-sm' variant='light'>
-                        Details
+                        جزئیات
                       </Button>
                     </LinkContainer>
                   </td>
@@ -163,21 +201,7 @@ const ProfileScreen = () => {
           </Table>
         )}
       </Col>
-      <Col md={3}>
-        <h2>MY CREDIT: </h2>
-        <Form.Group controlId='credit'>
-            <Form.Label>credit</Form.Label>
-            <Form.Control
-              type='number'
-              placeholder='مبلغ دلخواه'
-              value={balance}
-              onChange={(e) => setBalance(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-        <Button  type='submit' variant='primary'>
-          PAY
-        </Button>
-      </Col>
+     
     </Row>
   )
 }

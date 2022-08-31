@@ -11,11 +11,15 @@ import payRoutes from './routes/payRoutes.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import { getPaymentDriver } from 'monopay'
 import cors from 'cors'
+import morgan from 'morgan'
 
 dotenv.config()
 connectDB()
 
 const app = express()
+if (process.env.NODE_ENV === 'development'){
+  app.use(morgan('dev'))
+}
 app.use(cors())
 
 
@@ -27,7 +31,7 @@ app.get('/', (req, res) => {
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
-app.use('/api/uploads', uploadRoutes)
+app.use('/api/upload', uploadRoutes)
 app.use('/api/payment', payRoutes)
 app.get('/api/config/zarinpal', (req, res) =>
   res.send(process.env.ZARIN_PAL_MERCHANT_ID)
@@ -40,12 +44,7 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 app.use(notFound)
 app.use(errorHandler)
 
-const monopayConfiguration = {
-  zarinpal: {
-    merchantId: `${process.env.ZARIN_PAL_MERCHANT_ID}`,
-    sandbox: true,
-},
-}
+
 const chosenDriver = 'zarinpal'
 app.get('/payorder', async (req, res) => {
   try {
@@ -91,8 +90,6 @@ app.all('/callback', async (req, res) => {
       console.log(e.message)
   }
 })
-
-
 
 
 const PORT = process.env.PORT || 5000

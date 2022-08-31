@@ -8,6 +8,7 @@ import { createOrder } from '../actions/orderActions'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 import { USER_DETAILS_RESET } from '../constants/userConstants'
+import commaNumber from 'comma-number'
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch()
@@ -23,15 +24,14 @@ const PlaceOrderScreen = () => {
   const { order, success, error } = orderCreate
 
   //   Calculate prices
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(0)
-  }
 
-  cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+  cart.itemsPrice = cart.cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
   )
-  cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100)
-  cart.taxPrice = addDecimals(Number((0.1 * cart.itemsPrice).toFixed(0)))
+
+  cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 100
+  cart.taxPrice = Number((0.09 * cart.itemsPrice).toFixed(0))
   cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) +
@@ -39,12 +39,12 @@ const PlaceOrderScreen = () => {
   ).toFixed(0)
 
   useEffect(() => {
-    if (success) {
+    if (success && order._id) {
       navigate(`/order/${order._id}`)
       dispatch({ type: USER_DETAILS_RESET })
       dispatch({ type: ORDER_CREATE_RESET })
     }
-  }, [success, navigate])
+  }, [success, navigate, dispatch, order])
 
   const placeOrderHandler = () => {
     dispatch(
@@ -61,14 +61,17 @@ const PlaceOrderScreen = () => {
   }
   return (
     <>
+      <Link to='/payment' className='btn btn-light my-3'>
+        بازگشت
+      </Link>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h2> محل تحویل </h2>
               <p>
-                <strong>Address: </strong>
+                <strong>آدرس : </strong>
                 {cart.shippingAddress.address},{cart.shippingAddress.city},
                 {cart.shippingAddress.postalCode},{cart.shippingAddress.country}
                 ,
@@ -76,15 +79,15 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>payment method</h2>
-              <strong>Method: </strong>
+              <h2>روش پرداخت</h2>
+              <strong>روش: </strong>
               {cart.paymentMethod}
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Order Items</h2>
+              <h2>لیست محصولات سفارش شما</h2>
               {cart.cartItems.length === 0 ? (
-                <Message> Your cart is empty</Message>
+                <Message> سبد خرید شما خالی است</Message>
               ) : (
                 <ListGroup variant='flush'>
                   {cart.cartItems.map((item, index) => (
@@ -104,7 +107,8 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          تعداد {item.qty} ضرب در {commaNumber(item.price)} ={' '}
+                          {commaNumber(item.qty * item.price)} ریال
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -119,33 +123,33 @@ const PlaceOrderScreen = () => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <h2>Order Summary</h2>
+                <h2>خلاصه سفارش شما</h2>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>محصول</Col>
+                  <Col>{commaNumber(cart.itemsPrice)} ریال</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>هزینه ارسال</Col>
+                  <Col>{commaNumber(cart.shippingPrice)} ریال</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>مالیات بر ارزش افزوده</Col>
+                  <Col> {commaNumber(cart.taxPrice)} ریال </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>مبلغ قابل پرداخت</Col>
+                  <Col> {commaNumber(cart.totalPrice)} ریال</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -160,7 +164,7 @@ const PlaceOrderScreen = () => {
                   onClick={placeOrderHandler}
                 >
                   {' '}
-                  Place Order
+                  تایید سفارش
                 </Button>
               </ListGroup.Item>
             </ListGroup>

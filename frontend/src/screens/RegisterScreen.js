@@ -9,6 +9,7 @@ import FormContainer from '../components/FormContainer'
 
 const RegisterScreen = () => {
   const [name, setName] = useState('')
+  const [mobile, setMobile] = useState(0)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -36,61 +37,71 @@ const RegisterScreen = () => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(register(name, email, password))
+      dispatch(register(name, mobile ,email, password))
     }
   }
   return (
     <FormContainer>
-      <h1>Sign Up</h1>
+      <h1>ثبت نام</h1>
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='name'>
-          <Form.Label>Name</Form.Label>
+          <Form.Label >  نام و نام خانوادگی   </Form.Label>
           <Form.Control
             type='name'
-            placeholder='Enter name'
+            placeholder='نام و نام خانوادگی را وارد کنید'
             value={name}
             onChange={(e) => setName(e.target.value)}
           ></Form.Control>
         </Form.Group>
+        <Form.Group controlId='mobile'>
+          <Form.Label>شماره همراه: </Form.Label>
+          <Form.Control
+            type='mobile'
+            placeholder='شماره همراه خود را وارد کنید'
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
         <Form.Group controlId='email'>
-          <Form.Label>Email Address</Form.Label>
+          <Form.Label>آدرس ایمیل</Form.Label>
           <Form.Control
             type='email'
-            placeholder='Enter email'
+            placeholder='ایمیل خود را وارد کنید'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
         </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
+        <Form.Group controlId='پسورد'>
+          <Form.Label>پسورد</Form.Label>
           <Form.Control
             type='password'
-            placeholder='Enter password'
+            placeholder='پسورد خود را وارد کنید'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId='confirmPassword'>
-          <Form.Label>Confirm Password</Form.Label>
+          <Form.Label>پسورد </Form.Label>
           <Form.Control
             type='password'
-            placeholder='Confirm password'
+            placeholder='پسورد خود را مجدد وارد کنید'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <Button type='submit' variant='primary'>
-          Register
+          ثبت نام
         </Button>
       </Form>
       <Row className='py-3'>
         <Col>
-          Have an Account?{' '}
+           قبلا ثبت نام کرده اید ؟{' '}
           <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
-            Login
+            ورود
           </Link>
         </Col>
       </Row>

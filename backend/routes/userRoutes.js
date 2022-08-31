@@ -2,6 +2,8 @@ import express from 'express'
 import asyncHandler from 'express-async-handler'
 import {
   authUser,
+  otpUser,
+  authUserOtp,
   getUserProfile,
   getUsers,
   registerUser,
@@ -16,6 +18,8 @@ const router = express.Router()
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
 router.post('/login', authUser)
+router.post('/otp', otpUser)
+router.post('/otplogin', authUserOtp)
 router
   .route('/profile')
   .get(protect, getUserProfile)

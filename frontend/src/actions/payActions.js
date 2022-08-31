@@ -5,7 +5,7 @@ import {
 } from '../constants/payConstants'
 import axios from 'axios'
 
-export const pay = (params) => async (dispatch, getState) => {
+export const pay = (amount,userId) => async (dispatch, getState) => {
   try {
     dispatch({
       type: ZARINPAL_PAYMENT_REQUEST,
@@ -16,15 +16,18 @@ export const pay = (params) => async (dispatch, getState) => {
         'Content-Type': 'application/json',
       },
     }
-    const { data } = axios.post(
-      'https://api.zarinpal.com/pg/v4/payment/request.json',
-      params,
+    const { link } = axios.post(
+      '/api/payment',
+      {amount, userId},
       config
     )
+    window.location.href = link
+
+
 
     dispatch({
       type: ZARINPAL_PAYMENT_SUCCESS,
-      payload: data,
+     
     })
   } catch (error) {
     dispatch({

@@ -11,6 +11,7 @@ import { USER_UPDATE_RESET } from '../constants/userConstants'
 const UserEditScreen = () => {
   const { userId } = useParams()
   const [name, setName] = useState('')
+  const [mobile, setMobile] = useState('')
   const [email, setEmail] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
 
@@ -37,6 +38,7 @@ const UserEditScreen = () => {
         dispatch(getUserDetails(userId))
       } else {
         setName(user.name)
+        setMobile(user.mobile)
         setEmail(user.email)
         setIsAdmin(user.isAdmin)
       }
@@ -45,7 +47,7 @@ const UserEditScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateUser({_id: userId,name,email,isAdmin}))
+    dispatch(updateUser({_id: userId,name,mobile,email,isAdmin}))
   }
   return (
     <>
@@ -53,7 +55,7 @@ const UserEditScreen = () => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Edit User</h1>
+        <h1>ویرایش کاربر</h1>
         {loadingUpdate && <Loader /> }
         {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
@@ -63,16 +65,27 @@ const UserEditScreen = () => {
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>نام و نام خانوادگی</Form.Label>
               <Form.Control
                 type='name'
-                placeholder='Enter name'
+                placeholder='نام و نام خانوادگی را وارد کنید'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
+
+            <Form.Group controlId='mobile'>
+              <Form.Label>  شماره همراه   </Form.Label>
+              <Form.Control
+                type='mobile'
+                placeholder='شماره همراه خود را وارد کنید'
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Form.Group controlId='email'>
-              <Form.Label>Email Address</Form.Label>
+              <Form.Label>ایمیل</Form.Label>
               <Form.Control
                 type='email'
                 placeholder='Enter email'
@@ -90,7 +103,7 @@ const UserEditScreen = () => {
             </Form.Group>
 
             <Button type='submit' variant='primary'>
-              Update
+              بروزرسانی
             </Button>
           </Form>
         )}

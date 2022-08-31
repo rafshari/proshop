@@ -1,10 +1,10 @@
-//import react from 'react'
-import Header from './components/Header'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Container } from 'react-bootstrap'
+import NavbarComponent from './components/NavbarComponent'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import React from 'react'
 import CartScreen from './screens/CartScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
@@ -13,22 +13,23 @@ import ShippingScreen from './screens/ShippingScreen'
 import PaymentScreen from './screens/PaymentScreen'
 import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreenn from './screens/OrderScreenn'
-import { Container } from 'react-bootstrap'
 import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
+import OtpLoginScreen from './screens/OtpLoginScreen'
+
+//import ModalComp from './components/ModalComp'
 
 const App = () => {
   return (
     <Container>
       <Router>
-        <Header />
+        <NavbarComponent />
         <Routes>
           <Route path='/login' element={<LoginScreen />} />
           <Route path='/register' element={<RegisterScreen />} />
-          <Route path='/' element={<HomeScreen />} />
           <Route path='/product/:productId' element={<ProductScreen />} />
           <Route path='/cart' element={<CartScreen />} />
           <Route path='/cart/:productId' element={<CartScreen />} />
@@ -39,8 +40,13 @@ const App = () => {
           <Route path='/order/:orderId' element={<OrderScreenn />} />
           <Route path='/admin/userlist' element={<UserListScreen />} />
           <Route path='/admin/user/:userId/edit' element={<UserEditScreen />} />
-          <Route path='/admin/productlist' element={<ProductListScreen />} />
+          <Route path='/admin/productlist/:pageNumber' element={<ProductListScreen />}  />
+          <Route path='/admin/productlist' element={<ProductListScreen />} exact/>
           <Route path='/admin/orderlist' element={<OrderListScreen />} />
+          <Route path='/search/:keyword' element={<HomeScreen />} exact />
+          <Route path='/page/:pageNumber' element={<HomeScreen /> } exact />
+          <Route path='/search/:keyword/page/:pageNumber' element={<HomeScreen /> } exact />
+          <Route path='/' element={<HomeScreen /> } exact />
           <Route
             path='/admin/product/:productId/edit'
             element={<ProductEditScreen />}

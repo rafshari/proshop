@@ -15,6 +15,7 @@
   "license": "ISC",
   "description": "MERN shopping App",
   "dependencies": {
+    "autoprefixer": "10.4.5",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
@@ -25,7 +26,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4",
     "monopay": "^1.2.2",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
+    "trez-sms-client": "^1.0.4",
     "zarinpal-checkout": "^0.2.7"
   },
   "devDependencies": {

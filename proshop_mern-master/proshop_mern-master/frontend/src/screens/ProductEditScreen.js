@@ -126,6 +126,9 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
+
+
+
             <Form.Group controlId='image'>
               <Form.Label>Image</Form.Label>
               <Form.Control
@@ -142,6 +145,9 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.File>
               {uploading && <Loader />}
             </Form.Group>
+
+
+
 
             <Form.Group controlId='brand'>
               <Form.Label>Brand</Form.Label>
