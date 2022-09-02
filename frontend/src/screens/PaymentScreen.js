@@ -39,10 +39,10 @@ const PaymentScreen = () => {
 
           <Col>
             <Form.Check
-              label='پرداخت نقدی'
+              label=' پرداخت نقدی موقع تحویل'
               type='radio'
               name='paymentMethod'
-              value='cash'
+              value='نقدی موقع تحویل'
               id='paymentMethod1'
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
