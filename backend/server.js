@@ -9,7 +9,6 @@ import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRouts.js'
 import payRoutes from './routes/payRoutes.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
-import { getPaymentDriver } from 'monopay'
 import cors from 'cors'
 import morgan from 'morgan'
 
