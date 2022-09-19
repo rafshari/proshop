@@ -6,12 +6,12 @@ node_modules/
 /.pnp
 .pnp.js
 proshop_mern-master
-proshop_mern-master
+proshop_mern-master/
 # testing
 /coverage
 
 # production
-/frontend/build
+/client/build
 
 
 # misc

@@ -1,0 +1,7 @@
+docker build -t arvanpass/mern_client:v1 .
+
+docker build -t arvanpass/mern_server:v1 .
+
+docker push arvanpass/mern_server:v1
+
+docker push arvanpass/mern_client:v1
