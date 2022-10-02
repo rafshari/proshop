@@ -13,6 +13,7 @@ proshop_mern-master/
 # production
 /client/build
 
+commands
 
 # misc
 .DS_Store
@@ -26,3 +27,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode/settings.json
+test.yaml
+docker-compose.yaml
+MERN.yaml

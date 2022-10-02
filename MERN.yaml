@@ -9,8 +9,8 @@ spec:
 accessModes:
 - ReadWriteOnce
 resources:
-   requests:
-     storage: 1G
+  requests:
+    storage: 1G
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -56,9 +56,9 @@ metadata:
   spec:
    ports: 27017
    protocol: TCP
-  selector:
-    app: mongodb
-    type: ClusterIp
+   selector:
+     app: mongodb
+     type: ClusterIp
 
 ---
 apiVersion: app/v1
@@ -113,31 +113,32 @@ apiVersion: app/v1
 kind: Deployment
 metadata:
   name: cloud1-client-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cloud1-client
+    replicas: 1
+  template:
+     metadata:
+       labels: 
+         app: cloud1-client
   spec: 
-   replicas: 1
-   template:
-   metadata:
-     labels: 
-       app: cloud1-client
-   spec: 
-  containers:
-  - name: cloud1-client
-  resources:
-   limits: 
-     cpu: 1500m
-     ephemeral-storage: 1G
-     memory: 600M
-     requests:
-      cpu: 1500m
-      ephemeral-storage: 1G
-      memory: 600m
-  image: arvanpaas/mern_client:v1
-  ports: 
-  - containerPort: 80
-    name: http-port
-selector:
-   matchLabels:
-   app: cloud1-client
+   containers:
+   - name: cloud1-client
+     image: arvanpaas/mern_client:v1
+     resources:
+      limits: 
+       cpu: 1500m
+       ephemeral-storage: 1G
+       memory: 600M
+      requests:
+        cpu: 1500m
+        ephemeral-storage: 1G
+        memory: 600m
+      ports: 
+      - containerPort: 80
+        name: http-port
+  
 
 ---
 apiVersion: v1
@@ -159,17 +160,16 @@ kind: Route
 metadata: 
   name: cloud1-client-route
   namespace: arvan-test
-
-  spec:
-    host: cloud1-client-arvan-test.app.ir-thr-at1.arvan.run
-    port: 
-      targetPort: http
-    tls: 
-      insecureEdgeTerminationPolicy: Redirect
-      termination: edge 
-    to: 
-      kind: service 
-      name: cloud1-client  
+spec:
+  host: cloud1-client-arvan-test.app.ir-thr-at1.arvan.run
+  port: 
+    targetPort: http
+  tls: 
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge 
+  to: 
+    kind: service 
+    name: cloud1-client  
 
     
 
