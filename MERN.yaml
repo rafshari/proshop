@@ -64,68 +64,68 @@ metadata:
 apiVersion: app/v1
 kind: Deployment
 metadata:
-  name: cloud1-server-deployment
+  name: eshop-server-deployment
   spec: 
    replicas: 1
    template:
      labels: 
-       app: cloud1-server
+       app: eshop-server
        resources: 
    limits: 
      cpu: 1500m
      ephemeral-storage: 1G
      memory: 600M
-  image: arvanpaas/mern_server:v1
+  image: rafshari/eshop_server:v1
   ports: 
   - containerPort: 5000
     name: nodejs-port
 selector:
    matchLabels:
-   app: cloud1-server
+   app: eshop-server
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud1-server-service
+  name: eshop-server-service
   spec:
    ports: 5000
    protocol: TCP
   selector:
-    app: cloud1-server
+    app: eshop-server
     type: ClusterIp
 
 ---
 apiVersion: app/v1
 kind: Deployment
 metadata:
-  name: cloud1-server-service
+  name: eshop-server-service
   spec: 
    ports: 
    - port: 5000
      protocol: TCP
 selector:
-   app: cloud1-server
+   app: eshop-server
    type: ClusterIp
 
 ---
 apiVersion: app/v1
 kind: Deployment
 metadata:
-  name: cloud1-client-deployment
+  name: eshop-client-deployment
 spec:
   selector:
     matchLabels:
-      app: cloud1-client
+      app: eshop-client
     replicas: 1
   template:
      metadata:
        labels: 
-         app: cloud1-client
+         app: eshop-client
   spec: 
    containers:
-   - name: cloud1-client
-     image: arvanpaas/mern_client:v1
+   - name: eshop-client
+     image: rafshari/eshop_client:v1
      resources:
       limits: 
        cpu: 1500m
@@ -144,24 +144,24 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud1-client
+  name: eshop-client
   spec:
    - ports: 80
      protocol: TCP
      targetPort: 80
      name: http
   selector:
-    app: cloud1-client
+    app: eshop-client
     type: ClusterIp
 
 ---
 apiVersion: route.openshift.io/v1
 kind: Route 
 metadata: 
-  name: cloud1-client-route
+  name: eshop-client-route
   namespace: arvan-test
 spec:
-  host: cloud1-client-arvan-test.app.ir-thr-at1.arvan.run
+  host: eshop-client-arvan-test.app.ir-thr-at1.arvan.run
   port: 
     targetPort: http
   tls: 
@@ -169,7 +169,7 @@ spec:
     termination: edge 
   to: 
     kind: service 
-    name: cloud1-client  
+    name: eshop-client  
 
     
 
