@@ -11,6 +11,14 @@ yaml
 yaml/
 
 # testing
+
+
+
+
+
+git
+
+
 /coverage
 
 # production
