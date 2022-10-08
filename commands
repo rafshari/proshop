@@ -2,6 +2,16 @@ docker build -t arvanpass/mern_client:v1 .
 
 docker build -t arvanpass/mern_server:v1 .
 
-        docker push arvanpass/mern_server:v1
+docker push arvanpass/mern_server:v1
 
 docker push arvanpass/mern_client:v1
+
+
+
+docker build -t rafshari/eshop_client:v1.0.1 .
+
+docker build -t rafshari/eshop_server:v1.0.1 .
+
+docker push rafshari/eshop_server:v1.0.1
+
+docker push rafshari/eshop_client:v1.0.1 

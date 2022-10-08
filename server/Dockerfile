@@ -1,9 +1,9 @@
 FROM node:16
 ENV NODE_ENV production
 
-RUN  mkdir -p /cloud1-server
+RUN  mkdir -p /eshop-server
 
-WORKDIR /cloud1-server
+WORKDIR /eshop-server
 
 COPY package.json ./
 
