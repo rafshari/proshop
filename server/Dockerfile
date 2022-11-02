@@ -1,5 +1,6 @@
 FROM node:16
-ENV NODE_ENV production
+
+ENV NODE_ENV='production'
 
 RUN  mkdir -p /eshop-server
 

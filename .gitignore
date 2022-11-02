@@ -3,12 +3,17 @@
 # dependencies
 node_modules
 node_modules/
+k8s
+k8s/
+test
+test/
 /.pnp
 .pnp.js
 proshop_mern-master
 proshop_mern-master/
 yaml
 yaml/
+
 
 # testing
 
@@ -23,7 +28,7 @@ git
 
 # production
 /client/build
-
+/test
 commands
 
 # misc

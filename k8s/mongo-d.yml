@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+spec: 
+  replicas: 1
+  template:
+    metadata:
+     labels: 
+       app: mongodb
+    spec:
+      containers:
+       - name: mongodb
+         resources: 
+           limits: 
+            cpu: 1500m
+            ephemeral-storage: 1G
+            memory: 600M
+           requests: 
+            cpu: 1500m
+            ephemeral-storage: 1G
+            memory: 600M
+         image: mongo:4.0.4
+         ports: 
+           - containerPort: 27017
+             name: mongodb-port
+         volumeMounts: 
+          - mountPath: /data/db
+            name: mongodb-pvc
+      volumes: 
+        - name: mongodb-pvc
+          PersistentVolumeClaim:
+           claimName: mongodb-pvc
+  selector:
+    matchLabels:
+     app: mongodb

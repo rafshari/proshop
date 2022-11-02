@@ -14,7 +14,7 @@ RUN npm run build
 
 FROM nginx:1.16.0
 
-COPY --from=build /eshop-client/build/ usr/share/nginx/html 
+COPY --from=build /eshop-client/build/ docker 
 
 RUN rm /etc/nginx/conf.d/default.conf
 
@@ -22,4 +22,4 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 
 EXPOSE 80
 
-CMD ["/bin/bash", "-c",  "nginx -g \"daemon off;"\""]
+CMD ["nginx", "-g", "daemon off;"]
