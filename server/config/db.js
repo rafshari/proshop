@@ -4,7 +4,8 @@ import colors from 'colors'
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(`mongodb://mongodb-service/eshop`, {
+    const conn = await mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.skexl.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`
+    , {
       useUnifiedTopology: true,
       useNewUrlParser: true ,
       autoIndex: true,

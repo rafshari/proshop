@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import {
   Button,
   Row,
   Col,
   ListGroup,
-  Image,
   Form,
   Modal,
 } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { createOrder } from '../actions/orderActions'
-import { ORDER_CREATE_RESET } from '../constants/orderConstants'
-import { USER_DETAILS_RESET } from '../constants/userConstants'
-import commaNumber from 'comma-number'
 import OtpSteps from '../components/OtpSteps'
 import { otpSend } from '../actions/userActions'
 
@@ -27,12 +20,10 @@ const OtpLoginScreen = () => {
   const [show, setShow] = useState(true)
 
   const userOtpSend = useSelector((state) => state.userOtpSend)
-  const { loading, success, error } = userOtpSend
+  const { loading, success } = userOtpSend
 
   const userLoginOtp = useSelector((state) => state.userOtpLogin)
   const {
-    loading: loadingOtpLogin,
-    error: errorOtpLogin,
     userInfo,
   } = userLoginOtp
 

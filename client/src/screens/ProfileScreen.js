@@ -53,7 +53,7 @@ const ProfileScreen = () => {
         setEmail(user.email)
       }
     }
-  }, [navigate, dispatch, userInfo, user])
+  }, [navigate, dispatch, userInfo, user, setAmount])
 
   const submitHandler = (e) => {
     e.preventDefault()

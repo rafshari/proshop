@@ -78,16 +78,16 @@ spec:
     spec:
       containers:
       - name: eshop-server
-        image: rafshari/eshop-server:v1.0.1
+        image: rafshari/eshop_server:v1
         resources:
           limits:
-            memory: "128Mi"
+            memory: 600M
             ephemeral-storage: 1G
-            cpu: "500m"
+            cpu: 1500m
           requests:
-            memory: "128Mi"
+            memory: 600M
             ephemeral-storage: 1G
-            cpu: "500m"
+            cpu: 1500m
         ports:
         - containerPort: 5000
  
@@ -95,11 +95,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: eshop-server-service
+  name: eshop-server
 spec:
   ports:
   - port: 5000
     protocol: TCP
+    targetPort: 5000
   selector:
     app: eshop-server
   type: ClusterIP
@@ -108,7 +109,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eshop-client-deployment
+  name: eshop-client
 spec: 
   replicas: 1
   template:
@@ -127,7 +128,7 @@ spec:
                cpu: 1500m
                ephemeral-storage: 1G
                memory: 600M
-           image: rafshari/eshop-client:v1.0.1
+           image: rafshari/eshop_client:v1.1.1
            ports: 
            - containerPort: 80
              name: http-port
@@ -147,9 +148,8 @@ spec:
        targetPort: 80
        name: http
    selector:
-    app: eshop-client
-    type: ClusterIp
-
+     app: eshop-client
+   type: ClusterIP
 ---
 apiVersion: route.openshift.io/v1
 kind: Route 
@@ -157,7 +157,7 @@ metadata:
   name: eshop-route
   namespace: eshop
 spec:
-  host: eshop-client-eshop.apps.ir-thr-at1.arvan.run
+  host: eshop-client-eshop.apps.ir-thr-ba1.arvan.run
   port: 
     targetPort: http
   tls: 
@@ -166,4 +166,38 @@ spec:
   to: 
     kind: service 
     name: eshop-client
-  
+---
+apiVersion: route.openshift.io/v1
+kind: Route 
+metadata: 
+  name: eshop-route-client
+  namespace: eshop
+spec:
+  host: eshop-client-eshop.apps.ir-thr-ba1.arvan.run
+  port: 
+    targetPort: http
+  tls: 
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge 
+  to: 
+    kind: service 
+    name: eshop-client
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route 
+metadata: 
+  name: eshop-route-server
+  namespace: eshop
+spec:
+  host: eshopserver-eshop.apps.ir-thr-ba1.arvan.run
+  port: 
+    targetPort: 5000
+  tls: 
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge 
+  to: 
+    kind: service 
+    name: eshop-server
+
+

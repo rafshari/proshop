@@ -26,7 +26,7 @@ const LoginScreen = () => {
   const { loading:loadingOtpSend, success:successOtpSend, error:errorOtpSend } = userOtpSend
 
   const userLoginOtp = useSelector((state) =>  state.userOtpLogin)
-  const { loading: loadingOtpLogin, error: errorOtpLogin, userInfo:UserInfoOtpLogin } = userLoginOtp
+  const { loading: loadingOtpLogin, error: errorOtpLogin } = userLoginOtp
   
 
 
