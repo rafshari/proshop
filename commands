@@ -8,34 +8,26 @@ docker push arvanpass/mern_client:v1
 ------------------------------------------
 docker login registry-stage.apps.ir-thr-at1.arvan.run
 --------------------------------
+docker build -t rafshari/eshop_server:v1.0.2 .
+docker build -t rafshari/eshop_client:v1.1.2 .
 
-docker build -t rafshari/eshop_client:v1.0.5 .
-docker build -t rafshari/eshop_server:v1.0.1 .
-
-docker push rafshari/eshop_server:v1.0.1
-docker push rafshari/eshop_client:v1.0.5
+docker push rafshari/eshop_server:v1.0.2
+docker push rafshari/eshop_client:v1.1.2
 
 docker login dockerregistry-eshop.apps.ir-thr-at1.arvan.run
 
 docker push  
 docker push dockerregistry-eshop.apps.ir-thr-at1.arvan.run/eshop-client
 
-
-
 minikube status
 minikube start
-
-
 
 arvan login
 arvan paas -h
 
-
 arvan paas get pod -n arvan-test -w
 rvan paas get pods
 arvan paas get services
-
-
 
 git remote remove origin
 git remote add origin https://gitlab-example-project.apps.ir-thr-at1.arvan.run/example/onlineShop.git

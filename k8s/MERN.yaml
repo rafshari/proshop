@@ -78,16 +78,16 @@ spec:
     spec:
       containers:
       - name: eshop-server
-        image: rafshari/eshop_server:v1
+        image: rafshari/eshop_server:v1.0.2
         resources:
           limits:
-            memory: 600M
-            ephemeral-storage: 1G
-            cpu: 1500m
+            memory: 200M
+            ephemeral-storage: 0.2G
+            cpu: 200m
           requests:
-            memory: 600M
-            ephemeral-storage: 1G
-            cpu: 1500m
+            memory: 200M
+            ephemeral-storage: 0.2G
+            cpu: 200m
         ports:
         - containerPort: 5000
  
@@ -101,6 +101,7 @@ spec:
   - port: 5000
     protocol: TCP
     targetPort: 5000
+    name: apiport
   selector:
     app: eshop-server
   type: ClusterIP
@@ -121,14 +122,14 @@ spec:
          - name: eshop-client
            resources:
              limits: 
-               cpu: 1500m
-               ephemeral-storage: 1G
-               memory: 600M
+               cpu: 200m
+               ephemeral-storage: 0.2G
+               memory: 200M
              requests:
-               cpu: 1500m
-               ephemeral-storage: 1G
-               memory: 600M
-           image: rafshari/eshop_client:v1.1.1
+               cpu: 200m
+               ephemeral-storage: 0.2G
+               memory: 200M
+           image: rafshari/eshop_client:v1.1.2
            ports: 
            - containerPort: 80
              name: http-port
@@ -192,12 +193,26 @@ metadata:
 spec:
   host: eshopserver-eshop.apps.ir-thr-ba1.arvan.run
   port: 
-    targetPort: 5000
+    targetPort: apiport
   tls: 
     insecureEdgeTerminationPolicy: Redirect
     termination: edge 
   to: 
     kind: service 
     name: eshop-server
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: publicimages
+spec:
+  resources:
+    requests:
+      storage: 1G
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+
 
 
