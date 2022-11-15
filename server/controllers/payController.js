@@ -12,10 +12,11 @@ const zarinpal = asyncHandler(async (req, res) => {
   let params = {
     merchant_id: process.env.ZARIN_PAL_MERCHANT_ID,
     amount: req.body.amount,
-    callback_url: 'http://94.101.189.64:5000/api/payment/callback',
+    callback_url:
+      'http://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/api/payment/callback',
     description: 'افزایش اعتبار حساب کاربری ',
     metadata: [{ orderId: req.body.orderId }],
-    order_id: req.body.orderId ,
+    order_id: req.body.orderId,
   }
   const response = await axios.post(
     'https://api.zarinpal.com/pg/v4/payment/request.json',
@@ -48,7 +49,9 @@ const callback = async (req, res, next) => {
     console.log('3:', payment)
     if (!payment) return res.send('همچین تراکنشی وجود ندارد')
     if (req.query.Status && req.query.Status !== 'OK') {
-      return res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`)
+      return res.redirect(
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+      )
     }
     /////////////  5- verification ///////////////////////////////////////////
     let params = {
@@ -60,39 +63,43 @@ const callback = async (req, res, next) => {
     const receipt = await axios.post(
       'https://api.zarinpal.com/pg/v4/payment/verify.json',
       params
-      )
-      console.log('5:', receipt)
-      ///////////////////////////  6- Update dataBase about Payment Done ////////////
-      if (receipt.status === 200) {
-        let balance = payment.amount
-        let user = await User.findById(payment.user)
-        if (user.balance) {
-          balance += user.balance
+    )
+    console.log('5:', receipt)
+    ///////////////////////////  6- Update dataBase about Payment Done ////////////
+    if (receipt.status === 200) {
+      let balance = payment.amount
+      let user = await User.findById(payment.user)
+      if (user.balance) {
+        balance += user.balance
+      }
+      user.balance = balance
+      payment.payment = true
+      const updatedPayment = await payment.save()
+      const updatedUser = await user.save()
+      console.log('6:', payment)
+      //   //////////////////////////////// update orderToPaid////////////////////////////
+      let order = await Order.findById(payment.orderId)
+      if (order) {
+        order.isPaid = true
+        order.paidAt = Date.now()
+        order.paymentResult = {
+          code: receipt.data.data.code,
+          ref_id: receipt.data.data.ref_id,
         }
-        user.balance = balance
-        payment.payment = true
-        const updatedPayment = await payment.save()
-        const updatedUser = await user.save()
-        console.log('6:', payment)
-        //   //////////////////////////////// update orderToPaid////////////////////////////
-        let order = await Order.findById(payment.orderId)
-        if (order) {
-          order.isPaid = true
-          order.paidAt = Date.now()
-          order.paymentResult = {
-            code: receipt.data.data.code,
-            ref_id: receipt.data.data.ref_id,
-          }
-          const updatedOrder = await order.save()
-          //////////////// redirect user ///////////////////////////////////
-          res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`)
-          console.log('7:', payment.orderId)
-          console.log('8:', updatedOrder)
+        const updatedOrder = await order.save()
+        //////////////// redirect user ///////////////////////////////////
+        res.redirect(
+          `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+        )
+        console.log('7:', payment.orderId)
+        console.log('8:', updatedOrder)
         console.log('9:', order.paymentResult)
       }
     } else {
       res.send('تراکنش ناموفق')
-      res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`)
+      res.redirect(
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+      )
     }
   } catch (err) {
     next(err)
@@ -106,9 +113,10 @@ const payReqByZarinpal = asyncHandler(async (req, res) => {
   let params = {
     merchant_id: process.env.ZARIN_PAL_MERCHANT_ID,
     amount: req.body.amount,
-    userId:req.body.userId,
+    userId: req.body.userId,
 
-    callback_url: 'http://94.101.189.64:5000/api/payment/callback',
+    callback_url:
+      'http://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/api/payment/callback',
     description: 'افزایش اعتبار حساب کاربری ',
     metadata: [{ userId }],
   }
@@ -143,7 +151,9 @@ const callbackZarinpal = async (req, res, next) => {
     console.log('3:', payment)
     if (!payment) return res.send('همچین تراکنشی وجود ندارد')
     if (req.query.Status && req.query.Status !== 'OK') {
-      return res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/pay/${userId}`)
+      return res.redirect(
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/pay/${userId}`
+      )
     }
     /////////////  5- verification ///////////////////////////////////////////
     let params = {
@@ -155,43 +165,47 @@ const callbackZarinpal = async (req, res, next) => {
     const receipt = await axios.post(
       'https://api.zarinpal.com/pg/v4/payment/verify.json',
       params
-      )
-      console.log('5:', receipt)
-      ///////////////////////////  6- Update dataBase about Payment Done ////////////
-      if (receipt.status === 200) {
-        let balance = payment.amount
-        let user = await User.findById(payment.user)
-        if (user.balance) {
-          balance += user.balance
+    )
+    console.log('5:', receipt)
+    ///////////////////////////  6- Update dataBase about Payment Done ////////////
+    if (receipt.status === 200) {
+      let balance = payment.amount
+      let user = await User.findById(payment.user)
+      if (user.balance) {
+        balance += user.balance
+      }
+      user.balance = balance
+      payment.payment = true
+      const updatedPayment = await payment.save()
+      const updatedUser = await user.save()
+      console.log('6:', payment)
+      //   //////////////////////////////// update orderToPaid////////////////////////////
+      let order = await Order.findById(payment.orderId)
+      if (order) {
+        order.isPaid = true
+        order.paidAt = Date.now()
+        order.paymentResult = {
+          code: receipt.data.data.code,
+          ref_id: receipt.data.data.ref_id,
         }
-        user.balance = balance
-        payment.payment = true
-        const updatedPayment = await payment.save()
-        const updatedUser = await user.save()
-        console.log('6:', payment)
-        //   //////////////////////////////// update orderToPaid////////////////////////////
-        let order = await Order.findById(payment.orderId)
-        if (order) {
-          order.isPaid = true
-          order.paidAt = Date.now()
-          order.paymentResult = {
-            code: receipt.data.data.code,
-            ref_id: receipt.data.data.ref_id,
-          }
-          const updatedOrder = await order.save()
-          //////////////// redirect user ///////////////////////////////////
-          res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`)
-          console.log('7:', payment.orderId)
-          console.log('8:', updatedOrder)
+        const updatedOrder = await order.save()
+        //////////////// redirect user ///////////////////////////////////
+        res.redirect(
+          `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+        )
+        console.log('7:', payment.orderId)
+        console.log('8:', updatedOrder)
         console.log('9:', order.paymentResult)
       }
     } else {
       res.send('تراکنش ناموفق')
-      res.redirect(`https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`)
+      res.redirect(
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+      )
     }
   } catch (err) {
     next(err)
   }
 }
 
-export { zarinpal, callback, payReqByZarinpal, callbackZarinpal  }
+export { zarinpal, callback, payReqByZarinpal, callbackZarinpal }
