@@ -56,7 +56,7 @@ const NavbarComponent = () => {
               </LinkContainer>
             )}
             {userInfo && userInfo.isAdmin && (
-              <NavDropdown title='Admin' id='adminmenu'>
+              <NavDropdown title='پنل مدیریت' id='adminmenu'>
                 <LinkContainer to='/admin/userlist'>
                   <NavDropdown.Item>کاربران</NavDropdown.Item>
                 </LinkContainer>

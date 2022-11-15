@@ -27,13 +27,13 @@ spec:
        - name: mongodb
          resources: 
            limits: 
-            cpu: 1500m
+            cpu: 1000m
             ephemeral-storage: 1G
-            memory: 600M
+            memory: 100M
            requests: 
-            cpu: 1500m
+            cpu: 1000m
             ephemeral-storage: 1G
-            memory: 600M
+            memory: 100M
          image: mongo:4.0.4
          ports: 
            - containerPort: 27017
@@ -78,18 +78,19 @@ spec:
     spec:
       containers:
       - name: eshop-server
-        image: rafshari/eshop_server:v1.0.2
+        image: rafshari/eshop_server:v1.0.3
         resources:
           limits:
-            memory: 200M
-            ephemeral-storage: 0.2G
-            cpu: 200m
+            memory: 100M
+            ephemeral-storage: 0.1G
+            cpu: 100m
           requests:
-            memory: 200M
-            ephemeral-storage: 0.2G
-            cpu: 200m
+            memory: 100M
+            ephemeral-storage: 0.1G
+            cpu: 100m
         ports:
         - containerPort: 5000
+          name: apiport
  
 ---
 apiVersion: v1
@@ -101,7 +102,7 @@ spec:
   - port: 5000
     protocol: TCP
     targetPort: 5000
-    name: apiport
+    name: api
   selector:
     app: eshop-server
   type: ClusterIP
@@ -122,14 +123,14 @@ spec:
          - name: eshop-client
            resources:
              limits: 
-               cpu: 200m
-               ephemeral-storage: 0.2G
-               memory: 200M
+               cpu: 100m
+               ephemeral-storage: 0.1G
+               memory: 100M
              requests:
-               cpu: 200m
-               ephemeral-storage: 0.2G
-               memory: 200M
-           image: rafshari/eshop_client:v1.1.2
+               cpu: 100m
+               ephemeral-storage: 0.1G
+               memory: 100M
+           image: rafshari/eshop_client:v1.1.4
            ports: 
            - containerPort: 80
              name: http-port
@@ -205,7 +206,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: publicimages
+  name: imagespvc
 spec:
   resources:
     requests:

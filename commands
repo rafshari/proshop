@@ -8,11 +8,11 @@ docker push arvanpass/mern_client:v1
 ------------------------------------------
 docker login registry-stage.apps.ir-thr-at1.arvan.run
 --------------------------------
-docker build -t rafshari/eshop_server:v1.0.2 .
-docker build -t rafshari/eshop_client:v1.1.2 .
+docker build -t rafshari/eshop_server:v1.0.3 .
+docker build -t rafshari/eshop_client:v1.1.4 .
 
-docker push rafshari/eshop_server:v1.0.2
-docker push rafshari/eshop_client:v1.1.2
+docker push rafshari/eshop_server:v1.0.3
+docker push rafshari/eshop_client:v1.1.4
 
 docker login dockerregistry-eshop.apps.ir-thr-at1.arvan.run
 
@@ -32,4 +32,29 @@ arvan paas get services
 git remote remove origin
 git remote add origin https://gitlab-example-project.apps.ir-thr-at1.arvan.run/example/onlineShop.git
 git push -u origin master
+
+
+
+minikube start
+minikube status
+docker ps -a
+docker image ls 
+docker attach CONTAINER_ID
+docker stop CONTAINER_ID
+docker rm CONTAINER_ID
+docker images
+ docker rmi <IMAGE_ID>
+docker history [IMAGE]
+
+    docker exec -ti my_server /bin/sh
+    docker kill
+docker events [CONTAINER]
+docker port [CONTAINER]
+docker top [CONTAINER]
+
+
+
+
+
+docker run -p 5000:5000 --rm -e MONGO_USER=roozbeh123 -e MONGO_PASS=roozbeh123 -e MONGO_DB_NAME=proshop rafshari/eshop_server:v1.0.1
 
