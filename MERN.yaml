@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: eshop-server
-        image: rafshari/eshop_server:v1.0.3
+        image: rafshari/eshop_server:v1.0.5
         resources:
           limits:
             memory: 100M
@@ -90,7 +90,7 @@ spec:
             cpu: 100m
         ports:
         - containerPort: 5000
-          name: apiport
+          name: nodejs-port
  
 ---
 apiVersion: v1
@@ -102,7 +102,7 @@ spec:
   - port: 5000
     protocol: TCP
     targetPort: 5000
-    name: api
+    name: apiport
   selector:
     app: eshop-server
   type: ClusterIP
@@ -130,7 +130,7 @@ spec:
                cpu: 100m
                ephemeral-storage: 0.1G
                memory: 100M
-           image: rafshari/eshop_client:v1.1.4
+           image: rafshari/eshop_client:v1.1.7
            ports: 
            - containerPort: 80
              name: http-port
