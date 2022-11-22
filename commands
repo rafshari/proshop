@@ -8,10 +8,10 @@ docker push arvanpass/mern_client:v1
 ------------------------------------------
 docker login registry-stage.apps.ir-thr-at1.arvan.run
 --------------------------------
-docker build -t rafshari/eshop_server:v1.0.6 .
+docker build -t rafshari/eshop_server:v1.0.7 .
 docker build -t rafshari/eshop_client:v1.1.7 .
 
-docker push rafshari/eshop_server:v1.0.6
+docker push rafshari/eshop_server:v1.0.7
 docker push rafshari/eshop_client:v1.1.7
 
 docker login dockerregistry-eshop.apps.ir-thr-at1.arvan.run

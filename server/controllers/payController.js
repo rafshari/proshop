@@ -13,7 +13,7 @@ const zarinpal = asyncHandler(async (req, res) => {
     merchant_id: process.env.ZARIN_PAL_MERCHANT_ID,
     amount: req.body.amount,
     callback_url:
-      'http://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/api/payment/callback',
+      'https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/api/payment/callback',
     description: 'افزایش اعتبار حساب کاربری ',
     metadata: [{ orderId: req.body.orderId }],
     order_id: req.body.orderId,
@@ -50,7 +50,7 @@ const callback = async (req, res, next) => {
     if (!payment) return res.send('همچین تراکنشی وجود ندارد')
     if (req.query.Status && req.query.Status !== 'OK') {
       return res.redirect(
-        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/order/${payment.orderId}`
       )
     }
     /////////////  5- verification ///////////////////////////////////////////
@@ -89,7 +89,7 @@ const callback = async (req, res, next) => {
         const updatedOrder = await order.save()
         //////////////// redirect user ///////////////////////////////////
         res.redirect(
-          `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+          `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/order/${payment.orderId}`
         )
         console.log('7:', payment.orderId)
         console.log('8:', updatedOrder)
@@ -98,7 +98,7 @@ const callback = async (req, res, next) => {
     } else {
       res.send('تراکنش ناموفق')
       res.redirect(
-        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/order/${payment.orderId}`
       )
     }
   } catch (err) {
@@ -116,7 +116,7 @@ const payReqByZarinpal = asyncHandler(async (req, res) => {
     userId: req.body.userId,
 
     callback_url:
-      'http://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/api/payment/callback',
+      'https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/api/payment/callback',
     description: 'افزایش اعتبار حساب کاربری ',
     metadata: [{ userId }],
   }
@@ -152,7 +152,7 @@ const callbackZarinpal = async (req, res, next) => {
     if (!payment) return res.send('همچین تراکنشی وجود ندارد')
     if (req.query.Status && req.query.Status !== 'OK') {
       return res.redirect(
-        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/pay/${userId}`
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/pay/${userId}`
       )
     }
     /////////////  5- verification ///////////////////////////////////////////
@@ -191,7 +191,7 @@ const callbackZarinpal = async (req, res, next) => {
         const updatedOrder = await order.save()
         //////////////// redirect user ///////////////////////////////////
         res.redirect(
-          `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+          `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/order/${payment.orderId}`
         )
         console.log('7:', payment.orderId)
         console.log('8:', updatedOrder)
@@ -200,7 +200,7 @@ const callbackZarinpal = async (req, res, next) => {
     } else {
       res.send('تراکنش ناموفق')
       res.redirect(
-        `https://eshopclient-eshop.apps.ir-thr-ba1.arvan.run/order/${payment.orderId}`
+        `https://eshopclient-eshop.apps.ir-thr-ba1.arvanpaas.ir/order/${payment.orderId}`
       )
     }
   } catch (err) {

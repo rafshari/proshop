@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: eshop-server
-        image: rafshari/eshop_server:v1.0.5
+        image: rafshari/eshop_server:v1.0.7
         resources:
           limits:
             memory: 100M
