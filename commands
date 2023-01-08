@@ -20,13 +20,13 @@ docker push
 docker push dockerregistry-eshop.apps.ir-thr-at1.arvan.run/eshop-client
 
 minikube status
-minikube start
+minikube startgit 
 
 arvan login
 arvan paas -h
 
 arvan paas get pod -n arvan-test -w
-rvan paas get pods
+arvan paas get pods
 arvan paas get services
 
 git remote remove origin
