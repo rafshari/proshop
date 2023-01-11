@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listOrders } from '../actions/orderActions'
-import {Miladi} from 'basic-shamsi'
-
+import { Miladi } from 'basic-shamsi'
 
 const OrderListScreen = () => {
   const dispatch = useDispatch()
@@ -26,10 +25,10 @@ const OrderListScreen = () => {
       navigate('/login')
     }
   }, [dispatch, navigate, userInfo])
-     
+
   return (
     <>
-      <h1>لیست سفارشات</h1>
+      <h1>لیست سفارشات و صورتحساب ها:</h1>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -53,9 +52,9 @@ const OrderListScreen = () => {
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
                 <td>{Miladi.toShamsi(order.createdAt)}</td>
-                <td>{order.totalPrice}  ریال</td>
+                <td>{order.totalPrice} ریال</td>
                 <td>
-                {order.isPaid ? (
+                  {order.isPaid ? (
                     Miladi.toShamsi(order.paidAt)
                   ) : (
                     <i className='fas fa-times' style={{ color: 'red' }}></i>
@@ -71,7 +70,7 @@ const OrderListScreen = () => {
                 <td>
                   <LinkContainer to={`/order/${order._id}`}>
                     <Button variant='light' className='btn-sm'>
-                      جزئیات
+                      جزئیات صورتحساب{' '}
                     </Button>
                   </LinkContainer>
                 </td>

@@ -81,15 +81,21 @@ const OrderScreen = () => {
       <Link to='/' className='btn btn-light my-3'>
         بازگشت
       </Link>
-      <h1>سفارش: {order._id} </h1>
+      <h1>صورت حساب کالا و خدمات </h1>
+      <hr/>
+      <h5>شماره : {order._id} </h5>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>ارسال به</h2>
+              <h2>مشخصات خریدار:</h2>
               <p>
                 {' '}
                 <strong>نام و نام خانوادگی: </strong> {order.user.name}{' '}
+              </p>
+              <p>
+                {' '}
+                <strong>شماره همراه: </strong> {order.user.mobile}{' '}
               </p>
               <p>
                 {' '}
@@ -127,7 +133,7 @@ const OrderScreen = () => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2> محصولات شما:</h2>
+              <h2> لیست کالاها:</h2>
               {order.orderItems.length === 0 ? (
                 <Message>سفارش نداشته اید</Message>
               ) : (
@@ -166,7 +172,7 @@ const OrderScreen = () => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <h2>خلاصه سفارش</h2>
+                <h2>خلاصه هزینه ها</h2>
               </ListGroup.Item>
 
               <ListGroup.Item>

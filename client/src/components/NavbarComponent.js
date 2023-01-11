@@ -58,13 +58,13 @@ const NavbarComponent = () => {
             {userInfo && userInfo.isAdmin && (
               <NavDropdown title='پنل مدیریت' id='adminmenu'>
                 <LinkContainer to='/admin/userlist'>
-                  <NavDropdown.Item>کاربران</NavDropdown.Item>
+                  <NavDropdown.Item>مدیریت کاربران</NavDropdown.Item>
                 </LinkContainer>
                 <LinkContainer to='/admin/productlist'>
-                  <NavDropdown.Item>محصولات</NavDropdown.Item>
+                  <NavDropdown.Item>مدیریت محصولات </NavDropdown.Item>
                 </LinkContainer>
                 <LinkContainer to='/admin/orderlist'>
-                  <NavDropdown.Item>سفارشات</NavDropdown.Item>
+                  <NavDropdown.Item>مدیریت سفارشات</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
             )}
