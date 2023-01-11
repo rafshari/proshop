@@ -1,17 +1,17 @@
 main {
   min-height: 80vh;
-  font-family: BYekan;
+  font-family: IRANSansWeb(FaNum);
 }
 @font-face {
-  font-family: 'byekan';
-  src: url('./fonts/BYekan.eot');
-  src: url('./fonts/BYekan.woff') format('woff');
-  src:url('./fonts/BYekan.ttf') format('truetype');
+  font-family: 'IRANSansWeb(FaNum)';
+  src: url('./fonts/IRANSansWeb(FaNum).eot');
+  src: url('./fonts/IRANSansWeb(FaNum).woff') format('woff');
+  src:url('./fonts/IRANSansWeb(FaNum).ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   }
   body{
-  font-family: "byekan";
+  font-family: "IRANSansWeb(FaNum)";
   }
 
 
@@ -22,7 +22,7 @@ h3 {
 h1 {
   font-size: 1.8rem;
   padding: 1rem 0;
-  font-family: BYekan;
+  font-family: IRANSansWeb(FaNum);
 }
 
 h2 {
