@@ -21,12 +21,13 @@ const SearchBox = () => {
      <Form.Control
        type='search'
        placeholder='جستجو کالاها ...  '
-       className='me-2'
+       className='me-5'
        aria-label='Search'
        onChange={(e) => setKeyword(e.target.value)}
 
      />
-     <Button variant='outline-success'onClick={submitHandler}>جستجو</Button>
+     
+     <Button variant='outline-danger'onClick={submitHandler}>جستجو</Button>
    </Form>
   )
 }

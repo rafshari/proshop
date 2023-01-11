@@ -20,7 +20,7 @@ const NavbarComponent = () => {
     dispatch(logout(), logout)
   }
   return (
-    <Navbar bg='dark' variant='dark' expand='lg'>
+    <Navbar bg='light' variant='light' expand='lg'>
       <Container fluid>
         <LinkContainer to='/'>
           <Navbar.Brand href='#'> DigiGhat </Navbar.Brand>
