@@ -18,6 +18,7 @@ import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
+import ReportScreen from './screens/ReportScreen'
 
 //import ModalComp from './components/ModalComp'
 
@@ -28,6 +29,7 @@ const App = () => {
         <NavbarComponent />
         <Routes>
           <Route path='/login' element={<LoginScreen />} />
+          <Route path='/report' element={<ReportScreen />} />
           <Route path='/register' element={<RegisterScreen />} />
           <Route path='/product/:productId' element={<ProductScreen />} />
           <Route path='/cart' element={<CartScreen />} />

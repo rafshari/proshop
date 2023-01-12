@@ -90,15 +90,15 @@ const ProductListScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-        <Table striped bordered hover responsive className='table-sm'>
+        <Table striped bordered hover responsive="sm">
           <thead>
             <tr>
               <th>کد</th>
-              <th>نام و نام خانوادگی</th>
+              <th>عنوان</th>
               <th>قیمت</th>
               <th>دسته</th>
               <th>برند</th>
-              <th></th>
+              <th>ابزار</th>
             </tr>
           </thead>
           <tbody>
