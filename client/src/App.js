@@ -20,6 +20,7 @@ import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import ReportScreen from './screens/ReportScreen'
 
+
 //import ModalComp from './components/ModalComp'
 
 const App = () => {
@@ -45,6 +46,7 @@ const App = () => {
           <Route path='/admin/productlist' element={<ProductListScreen />} exact/>
           <Route path='/admin/orderlist' element={<OrderListScreen />} />
           <Route path='/search/:keyword' element={<HomeScreen />} exact />
+          <Route path='/report/search/:keyword' element={<ReportScreen />} exact />
           <Route path='/page/:pageNumber' element={<HomeScreen /> } exact />
           <Route path='/search/:keyword/page/:pageNumber' element={<HomeScreen /> } exact />
           <Route path='/' element={<HomeScreen /> } exact />
