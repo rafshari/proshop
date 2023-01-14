@@ -4,6 +4,11 @@ import { listProducts } from '../actions/productActions'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
+import ToolkitProvider, {Search} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import { CSVExport } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min'
+
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
+
 
 const ReportScreen = () => {
   const dispatch = useDispatch()
@@ -15,34 +20,56 @@ const ReportScreen = () => {
   const { userInfo } = userLogin
 
   const columns = [
-    { dataField: '_id', text: 'کد', sort: true, filter: textFilter() },
+    { dataField: '_id', text: 'کد', sort: true },
     { dataField: 'name', text: 'عنوان' },
     { dataField: 'price', text: 'قیمت', sort: true },
     { dataField: 'category', text: 'دسته' },
     { dataField: 'brand', text: 'برند' },
   ]
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
+
+
   useEffect(() => {
     dispatch(listProducts())
-  }, [dispatch,  userInfo])
+  }, [dispatch, userInfo])
 
 
     return (
       
-            <BootstrapTable
-               bootstrap4
-              keyField='_id'
-              data={products}
-              columns={columns}
-              pagination={paginationFactory()}
-              filter={filterFactory()}
-        
-    />
+      <ToolkitProvider
+  keyField="_id"
+  data={ products }
+  columns={ columns }
+  search
+  exportCSV
+  
+  
+>
+{
+    props => (
+      <div>
+
+       <hr />
+        <ExportCSVButton { ...props.csvProps }>فرمت CSV!!</ExportCSVButton>
+        <SearchBar { ...props.searchProps }  />
+        <BootstrapTable
+          { ...props.baseProps }
+          pagination={paginationFactory()}
+          
+        />
+      </div>
+    )
+  }
+       
+
+
+</ToolkitProvider>
+
+
     )
     
-  
-
-
-  
+   
 }
 
 export default ReportScreen
