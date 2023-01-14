@@ -1,88 +1,48 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Table, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import Paginate from '../components/Paginate'
-import {
-  listProducts,
-} from '../actions/productActions'
-import commaNumber from 'comma-number'
-import SearchReport from '../components/SearchReport'
-import { Link } from 'react-router-dom'
-
-
-
+import { listProducts } from '../actions/productActions'
+import BootstrapTable from 'react-bootstrap-table-next'
+import paginationFactory from 'react-bootstrap-table2-paginator'
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
 
 const ReportScreen = () => {
-  const { keyword } = useParams()
-  const { pageNumber } = useParams() || 1
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const productList = useSelector((state) => state.productList)
-  const { loading, error, products, page, pages } = productList
+  const { loading, error, products } = productList
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const columns = [
+    { dataField: '_id', text: 'کد', sort: true, filter: textFilter() },
+    { dataField: 'name', text: 'عنوان' },
+    { dataField: 'price', text: 'قیمت', sort: true },
+    { dataField: 'category', text: 'دسته' },
+    { dataField: 'brand', text: 'برند' },
+  ]
   useEffect(() => {
-      dispatch(listProducts(keyword, pageNumber))
-    }, 
-	[ dispatch, navigate,  userInfo,  pageNumber,keyword])
+    dispatch(listProducts())
+  }, [dispatch,  userInfo])
 
-  return (
-    <>
 
-      <Row className='align-items-center'>
-      {!keyword ? (
-        <hr/>
-      ) : (
-        <Link to='/report' className='btn btn-light'>
-          بازگشت
-        </Link>
-      )}
-        <Col>
-          <h1>محصولات</h1>
-        </Col>
-        <Col>
-        <SearchReport/>
-        </Col>
-      </Row>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
-        <>
-          <Table striped bordered hover responsive='sm'>
-            <thead>
-              <tr>
-                <th>کد</th>
-                <th>عنوان</th>
-                <th>قیمت</th>
-                <th>دسته</th>
-                <th>برند</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{commaNumber(product.price)}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Paginate pages={pages} page={page} isAdmin={true} />
-        </>
-      )}
-    </>
-  )
+    return (
+      
+            <BootstrapTable
+               bootstrap4
+              keyField='_id'
+              data={products}
+              columns={columns}
+              pagination={paginationFactory()}
+              filter={filterFactory()}
+        
+    />
+    )
+    
+  
+
+
+  
 }
 
 export default ReportScreen

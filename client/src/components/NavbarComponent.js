@@ -66,6 +66,9 @@ const NavbarComponent = () => {
                 <LinkContainer to='/admin/orderlist'>
                   <NavDropdown.Item>مدیریت سفارشات</NavDropdown.Item>
                 </LinkContainer>
+                <LinkContainer to='/report'>
+                  <NavDropdown.Item>گزارشات</NavDropdown.Item>
+                </LinkContainer>
               </NavDropdown>
             )}
           </Nav>
