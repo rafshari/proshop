@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { listProducts } from '../actions/productActions'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
-import ToolkitProvider, {Search} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import ToolkitProvider, {
+  Search,
+} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit'
 import { CSVExport } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min'
-
-import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
-
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
 
 const ReportScreen = () => {
   const dispatch = useDispatch()
@@ -26,50 +27,46 @@ const ReportScreen = () => {
     { dataField: 'category', text: 'دسته' },
     { dataField: 'brand', text: 'برند' },
   ]
-  const { SearchBar } = Search;
-  const { ExportCSVButton } = CSVExport;
-
+  const { SearchBar } = Search
+  const { ExportCSVButton } = CSVExport
 
   useEffect(() => {
     dispatch(listProducts())
   }, [dispatch, userInfo])
 
-
-    return (
-      
-      <ToolkitProvider
-  keyField="_id"
-  data={ products }
-  columns={ columns }
-  search
-  exportCSV
-  
-  
->
-{
-    props => (
-      <div>
-
-       <hr />
-        <ExportCSVButton { ...props.csvProps }>فرمت CSV!!</ExportCSVButton>
-        <SearchBar { ...props.searchProps }  />
-        <BootstrapTable
-          { ...props.baseProps }
-          pagination={paginationFactory()}
-          
-        />
-      </div>
-    )
-  }
-       
-
-
-</ToolkitProvider>
-
-
-    )
-    
-   
+  return (
+    <> 
+    <h1> گزارش محصولات</h1>
+    {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : (
+    <ToolkitProvider
+      keyField='_id'
+      data={products}
+      columns={columns}
+      search
+      exportCSV
+    >
+      {(props) => (
+        <div>
+          <hr />
+          <ExportCSVButton {...props.csvProps} className='btn btn-success'>
+            فرمت CSV!!
+          </ExportCSVButton>
+          <hr />
+          <SearchBar {...props.searchProps} />
+          <BootstrapTable
+            {...props.baseProps}
+            pagination={paginationFactory()}
+          />
+        </div>
+      )}
+    </ToolkitProvider>
+    )}
+    </>
+  )
 }
 
 export default ReportScreen
