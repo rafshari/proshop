@@ -5,6 +5,11 @@ cd server
 npm start
 
 Enjoy!!!!
-![MY STORE](https://user-images.githubusercontent.com/102416116/225345222-c59e5f49-785f-4879-afa9-d5c8be78d2d8.jpg)
+<img width="960" alt="1" src="https://user-images.githubusercontent.com/102416116/225346569-507e0fce-1828-4ce6-a480-24af9afffc88.png">
+
+<img width="960" alt="2" src="https://user-images.githubusercontent.com/102416116/225346610-335b2dfc-4dc9-4821-b847-1c5aed049576.png">
+
+<img width="960" alt="3" src="https://user-images.githubusercontent.com/102416116/225346636-3bda5d39-8113-4889-8dcc-51df4b9f56bf.png">
+
 
 
